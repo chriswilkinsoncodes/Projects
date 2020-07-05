@@ -3,15 +3,21 @@
 import os
 import pathlib
 import shutil
+import time
 
 dirs = set()
 basepath = '/Users/username/Desktop/'
 destpath = '/Users/username/Documents/ScrShots_Desktop/'
 
+def folder_date(basepath, entry):
+    created = os.stat(basepath + entry).st_mtime
+    return time.strftime('%Y%m%d', time.localtime(created))
+
 # get file list and extract dates to check for directories
 for entry in os.listdir(basepath):
     if entry.startswith('Screen Shot'):
-        dirs.add(entry[12:22].replace('-', ''))
+        folder = folder_date(basepath, entry)
+        dirs.add(folder)
         print(entry)
 
 # check if directories exist and mkdir if not
@@ -26,12 +32,11 @@ for dir in dirs:
 
 # move files to directories
 for entry in os.listdir(basepath):
-    movedate = entry[12:22].replace('-', '')
     if entry.startswith('Screen Shot'):
-    # if entry.startswith('Screen Shot') and movedate != basepath[-9:-1]:
+        folder = folder_date(basepath, entry)
         try:
             source = basepath + entry
-            destination = destpath + movedate + '/'
+            destination = destpath + folder + '/'
             shutil.move(source, destination)
         except:
             print('File not moved: ' + entry)
