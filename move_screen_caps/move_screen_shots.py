@@ -40,8 +40,8 @@ def move_files(basepath, destpath):
                 source = basepath + entry
                 destination = destpath + folder + '/'
                 shutil.move(source, destination)
-            except:
-                print('File not moved: ' + entry)
+            except Exception as e:
+                print(f'File not moved: {entry}. {e}')
             else:
                 print(entry, 'moved.')
 
